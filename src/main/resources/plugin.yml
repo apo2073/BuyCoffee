@@ -1,0 +1,10 @@
+name: BuyCoffee
+main: kr.apo2073.Applications
+version: 0.0.1
+api-version: 1.20
+author: [ 아포칼립스 ]
+
+libraries:
+  - com.googlecode.json-simple:json-simple:1.1.1
+  - io.ktor:ktor-server-netty-jvm:2.3.12
+  - io.ktor:ktor-server-freemarker-jvm:2.3.12
