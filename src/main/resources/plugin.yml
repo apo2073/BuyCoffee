@@ -3,7 +3,15 @@ main: kr.apo2073.Applications
 version: 0.0.1
 api-version: 1.20
 author: [ 아포칼립스 ]
+commands:
+  후원하기:
 
+permissions:
+  buyCoffee.*:
+    description: BuyCoffee 전체 권한
+    children:
+      buyCoffee.done:
+        description: 후원하기 명령어 권한
 libraries:
   - com.googlecode.json-simple:json-simple:1.1.1
   - io.ktor:ktor-server-netty-jvm:2.3.12

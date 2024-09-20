@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin
 class Applications:JavaPlugin() {
     private lateinit var engine:ApplicationEngine
     private var port=config.getInt("port")
+    private var addr=config.getString("server-addr") ?: "example.com"
     override fun onEnable() {
         if (instance!=null) return
         instance=this
@@ -22,10 +23,16 @@ class Applications:JavaPlugin() {
     fun getInstance(): Applications {
         return instance!!
     }
+    fun getAddr():String {
+        return if (addr.contains("example")) {
+            return server.ip
+        } else {
+            addr
+        }
+    }
 
     companion object {
-        var instance:Applications?=null
-            private set
+        private var instance:Applications?=null
     }
 
     override fun onDisable() {

@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-server-freemarker-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
