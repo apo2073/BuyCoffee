@@ -1,2 +1,4 @@
 port: 2073
-server-addr: example.com
+server-addr: 127.0.0.1
+protocol: http
+

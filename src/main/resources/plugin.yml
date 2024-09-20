@@ -4,8 +4,8 @@ version: 0.0.1
 api-version: 1.20
 author: [ 아포칼립스 ]
 commands:
-  후원하기:
-
+  후원:
+    description: 후원 기본 명령어
 permissions:
   buyCoffee.*:
     description: BuyCoffee 전체 권한

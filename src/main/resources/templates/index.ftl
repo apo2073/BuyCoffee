@@ -74,6 +74,7 @@
         }
 
         .input-container {
+            display: flex;
             padding-left: 25px;
             margin-bottom: 20px; /* Space between input and button */
         }
@@ -81,7 +82,7 @@
         .input-label {
             display: block;
             margin-bottom: 8px;
-            font-size: 18px; /* Adjusted to match other text styles */
+            font-size: 20px; /* Adjusted to match other text styles */
             color: #4e5968;
             font-weight: bold; /* Make the text bold */
             padding-left: 10px; /* Move text 10px to the left */
@@ -91,12 +92,13 @@
             padding: 8px 15px; /*12*/
             border: 1px solid #d1d6db;
             border-radius: 6px;
-            font-size: 16px; /* Adjusted font size to match other text styles */
+            font-size: 16px;
             color: #4e5968;
-            /*width: calc(100% - 40px);*/
+            width: 140px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
-            margin: 0 auto; /* Align input box with the label */
+            margin-left: auto;
+            margin-right: 25px;
         }
 
         .donation-input:focus {
@@ -168,15 +170,11 @@
 
         async function main() {
             const urlParams = new URLSearchParams(window.location.search);
-            const uuid = urlParams.get('name');
-            if (uuid) {
-                const avatarUrl = `https://api.mineatar.io/face/${uuid}`;
-                document.getElementById('player-avatar').src = avatarUrl;
-                document.getElementById('player-avatar').style.display = 'block';
-            }
 
+            const userUUID = "${uuid}"
             const button = document.getElementById("payment-button");
             const amo = document.getElementById("amount-input");
+            // test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm
             const tossPayments = TossPayments("test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm");
             const customerKey = generateRandomString();
             const widgets = tossPayments.widgets({ customerKey });
@@ -210,7 +208,7 @@
                 await widgets.requestPayment({
                     orderId: generateRandomString(),
                     orderName: "후원",
-                    successUrl: window.location.origin + "/success",
+                    successUrl: window.location.origin + "/success?uuid=${uuid}",
                     failUrl: window.location.origin + "/fail",
                 });
             });

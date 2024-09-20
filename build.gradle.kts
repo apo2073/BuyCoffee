@@ -24,6 +24,9 @@ repositories {
     maven("https://oss.sonatype.org/content/groups/public/") {
         name = "sonatype"
     }
+    maven("https://jitpack.io") {
+        name= "jitpack"
+    }
 }
 
 dependencies {
@@ -35,6 +38,7 @@ dependencies {
     /*testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")*/
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
+    implementation("com.github.apo2073:ApoLib:1.0.3")
 }
 
 java {

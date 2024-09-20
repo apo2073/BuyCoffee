@@ -1,13 +1,16 @@
 package kr.apo2073.plugins
 
 import io.ktor.server.application.*
+import io.ktor.server.freemarker.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.bukkit.Bukkit
 
 fun Application.configureRouting() {
     routing {
         get("/") {
-            call.respondText("BuyCoffee By.아포칼립스")
+            val model= mutableMapOf<String, Any>()
+            call.respond(FreeMarkerContent("info.ftl", model, ""))
         }
     }
 }

@@ -3,6 +3,7 @@ package kr.apo2073
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import kr.apo2073.cmds.DonationCmds
 import kr.apo2073.plugins.*
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -10,29 +11,24 @@ import org.bukkit.plugin.java.JavaPlugin
 class Applications:JavaPlugin() {
     private lateinit var engine:ApplicationEngine
     private var port=config.getInt("port")
-    private var addr=config.getString("server-addr") ?: "example.com"
+    private var addr=config.getString("server-addr") ?: "127.0.0.1"
+    private var protocol=config.getString("protocol") ?: "http"
     override fun onEnable() {
         if (instance!=null) return
         instance=this
         saveDefaultConfig()
         engine= embeddedServer(Netty, port = this.port, host = "0.0.0.0", module = Application::module)
             .start(wait = false)
+        DonationCmds(this)
         server.logger.info("BuyCoffee By.아포칼립스")
     }
 
-    fun getInstance(): Applications {
-        return instance!!
-    }
     fun getAddr():String {
-        return if (addr.contains("example")) {
-            return server.ip
-        } else {
-            addr
-        }
+        return "${protocol}://${addr}:${port}"
     }
 
     companion object {
-        private var instance:Applications?=null
+        var instance:Applications?=null
     }
 
     override fun onDisable() {

@@ -8,6 +8,8 @@ import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.logging.*
+import kr.apo2073.lib.Plugins.log
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import org.json.simple.parser.ParseException
@@ -41,12 +43,14 @@ fun Application.configureTemplating() {
             val orderId: String
             val amount: String
             val paymentKey: String
+            val userUUID:String
             try {
                 // 클라이언트에서 받은 JSON 요청 바디입니다.
                 val requestData: JSONObject = parser.parse(jsonBody) as JSONObject
                 paymentKey = requestData.get("paymentKey").toString()
                 orderId = requestData.get("orderId").toString()
                 amount = requestData.get("amount").toString()
+                userUUID= requestData.get("uuid").toString()
             } catch (e: ParseException) {
                 throw RuntimeException(e)
             }
@@ -55,10 +59,12 @@ fun Application.configureTemplating() {
             obj.put("orderId", orderId)
             obj.put("amount", amount)
             obj.put("paymentKey", paymentKey)
+            obj.put("uuid", userUUID)
 
             // TODO: 개발자센터에 로그인해서 내 결제위젯 연동 키 > 시크릿 키를 입력하세요. 시크릿 키는 외부에 공개되면 안돼요.
             // @docs https://docs.tosspayments.com/reference/using-api/api-keys
-            val widgetSecretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6"
+            val widgetSecretKey = "test_sk_P9BRQmyarY9DmeGEwgA2rJ07KzLN"
+            //test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
 
             // 토스페이먼츠 API는 시크릿 키를 사용자 ID로 사용하고, 비밀번호는 사용하지 않습니다.
             // 비밀번호가 없다는 것을 알리기 위해 시크릿 키 뒤에 콜론을 추가합니다.
@@ -90,11 +96,21 @@ fun Application.configureTemplating() {
             val jsonObject: JSONObject = parser.parse(reader) as JSONObject
             responseStream.close()
 
+            if (isSuccess) {
+                print("a")
+            } else {
+                print("L")
+            }
+
             call.respond(HttpStatusCode.fromValue(code), jsonObject)
         }
 
         get("/success") {
-            call.respond(FreeMarkerContent("success.html", mapOf<String, Any>(), ""))
+            val uuid = call.request.queryParameters["uuid"] ?: "default-uuid"
+            call.respond(FreeMarkerContent("success.ftl", mapOf("uuid" to uuid), ""))
+        }
+        post("/success") {
+            val requestData = call.receiveText()
         }
 
         get("/fail") {
