@@ -60,6 +60,24 @@
         margin: 0 auto;
         color: #333D4B;
       }
+      #player-avatar {
+        width: 100px; /* Set the width of the avatar */
+        height: 100px; /* Set the height of the avatar */
+        border-radius: 50%; /* Make the image circular */
+        border: 3px solid #3182f6; /* Add a blue border around the avatar */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+        margin: 20px auto; /* Center the avatar and add margin */
+        display: block; /* Center the image block */
+      }
+
+      /* No UUID message */
+      .no-uuid-message {
+        font-size: 18px; /* Font size for the message */
+        color: #ff0000; /* Red color for the message */
+        text-align: center; /* Center align the text */
+        margin-top: 20px; /* Add some space above the text */
+      }
+
     </style>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -67,6 +85,11 @@
   </head>
 
   <body>
+  <#if uuid??>
+    <img id="player-avatar" src="https://api.mineatar.io/face/${uuid}?scale=64" alt="Player Avatar" class="avatar"/>
+  <#else>
+    <p class="no-uuid-message">No UUID provided</p>
+  </#if>
     <div id="info" class="box_section" style="width: 600px">
       <img width="100px" src="https://static.toss.im/lotties/error-spot-no-loop-space-apng.png" />
       <h2>결제를 실패했어요</h2>
@@ -81,7 +104,7 @@
       </div>
       <div class="p-grid">
         <button class="button p-grid-col5" onclick="location.href='https://docs.tosspayments.com/guides/v2/payment-widget/integration';">연동 문서</button>
-        <button class="button p-grid-col5" onclick="location.href='https://discordapp.com/users/715806802817712148';" style="background-color: #e8f3ff; color: #1b64da">실시간 문의</button>
+        <button class="button p-grid-col5" onclick="location.href='${helpME}';" style="background-color: #e8f3ff; color: #1b64da">실시간 문의</button>
       </div>
     </div>
 

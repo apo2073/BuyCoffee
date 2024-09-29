@@ -4,9 +4,9 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kr.apo2073.cmds.DonationCmds
-import kr.apo2073.plugins.*
+import kr.apo2073.plugins.configureRouting
+import kr.apo2073.plugins.configureTemplating
 import org.bukkit.plugin.java.JavaPlugin
-
 
 class Applications:JavaPlugin() {
     private lateinit var engine:ApplicationEngine
@@ -17,10 +17,14 @@ class Applications:JavaPlugin() {
         if (instance!=null) return
         instance=this
         saveDefaultConfig()
-        engine= embeddedServer(Netty, port = this.port, host = "0.0.0.0", module = Application::module)
-            .start(wait = false)
+        try {
+            engine= embeddedServer(Netty, port = this.port, host = "0.0.0.0", module = Application::module)
+                .start(wait = false)
+        } catch (e: Exception) {
+            logger.warning(e.message)
+        }
         DonationCmds(this)
-        server.logger.info("BuyCoffee By.아포칼립스")
+        server.logger.info("DonateMe By.아포칼립스")
     }
 
     fun getAddr():String {
@@ -33,7 +37,7 @@ class Applications:JavaPlugin() {
 
     override fun onDisable() {
         if (::engine.isInitialized) {
-            engine.stop(/*gracePeriodMillis = 1000, timeoutMillis = 10000*/)
+            engine.stop(gracePeriodMillis = 1000, timeoutMillis = 5000)
         }
     }
 }

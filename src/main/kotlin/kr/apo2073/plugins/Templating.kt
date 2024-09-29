@@ -1,6 +1,6 @@
 package kr.apo2073.plugins
 
-import freemarker.cache.*
+import freemarker.cache.ClassTemplateLoader
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.freemarker.*
@@ -8,8 +8,9 @@ import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.util.logging.*
-import kr.apo2073.lib.Plugins.log
+import kr.apo2073.Applications
+import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import org.json.simple.parser.ParseException
@@ -22,10 +23,12 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 
 
-
+val app=Applications.instance!!
+val helpMe=app.config.getString("문의링크") ?: "https://discordapp.com/users/715806802817712148"
 fun Application.configureTemplating() {
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
+        defaultEncoding="UTF-8"
     }
     routing {
         staticFiles("/static", File("files"))
@@ -50,7 +53,7 @@ fun Application.configureTemplating() {
                 paymentKey = requestData.get("paymentKey").toString()
                 orderId = requestData.get("orderId").toString()
                 amount = requestData.get("amount").toString()
-                userUUID= requestData.get("uuid").toString()
+                userUUID= requestData .get("uuid").toString()
             } catch (e: ParseException) {
                 throw RuntimeException(e)
             }
@@ -97,27 +100,38 @@ fun Application.configureTemplating() {
             responseStream.close()
 
             if (isSuccess) {
-                print("a")
+
             } else {
-                print("L")
+
             }
 
             call.respond(HttpStatusCode.fromValue(code), jsonObject)
         }
 
         get("/success") {
-            val uuid = call.request.queryParameters["uuid"] ?: "default-uuid"
-            call.respond(FreeMarkerContent("success.ftl", mapOf("uuid" to uuid), ""))
-        }
-        post("/success") {
-            val requestData = call.receiveText()
+            try {
+                val uuid = call.request.queryParameters["uuid"]
+                call.respond(FreeMarkerContent("success.ftl",
+                    mapOf("uuid" to uuid, "helpMe" to helpMe), ""))
+            } catch (e: Exception) {
+                call.respondText(e.toString())
+            }
         }
 
         get("/fail") {
-            val failCode = call.request.queryParameters["code"]
-            val failMessage = call.request.queryParameters["message"]
-            call.respond(FreeMarkerContent("fail.ftl"
-                , mapOf("code" to failCode, "message" to failMessage), ""))
+            try {
+                val uuid = call.request.queryParameters["uuid"]
+                val failCode = call.request.queryParameters["code"]
+                val failMessage = call.request.queryParameters["message"]
+                call.respond(FreeMarkerContent("fail.ftl"
+                    , mapOf("code" to failCode
+                        , "message" to failMessage
+                        , "uuid" to uuid
+                        , "helpME" to helpMe
+                    ), ""))
+            } catch (e: Exception) {
+                call.respondText(e.toString())
+            }
         }
     }
 }

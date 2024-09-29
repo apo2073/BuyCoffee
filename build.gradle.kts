@@ -35,8 +35,6 @@ dependencies {
     implementation("io.ktor:ktor-server-freemarker-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    /*testImplementation("io.ktor:ktor-server-test-host-jvm")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")*/
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
     implementation("com.github.apo2073:ApoLib:1.0.3")
 }
@@ -55,7 +53,9 @@ kotlin {
     jvmToolchain(targetJavaVersion)
 }
 
-
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
 
 tasks.processResources {
     val props = mapOf("version" to version)
@@ -70,4 +70,16 @@ tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "kr.apo2073.Applications"
     }
+}
+
+tasks.shadowJar {
+    archiveFileName.set("DonateMe.jar")
+    archiveClassifier.set("all")
+    //mergeServiceFiles()
+    //dependencies {
+    //    include(dependency("com.github.apo2073:ApoLib:1.0.3"))
+    //}
+    //from(sourceSets.main.get().output) {
+    //    include("**/*")
+    //}
 }

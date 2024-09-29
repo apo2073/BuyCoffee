@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>
-    BuyCoffee By.아포칼립스
+    DonateMe By.아포칼립스
 </h1>
 </body>
 </html>

@@ -114,7 +114,7 @@
   </div>-->
   <div class="p-grid" style="margin-top: 30px">
     <button class="button p-grid-col5" onclick="location.href='https://docs.tosspayments.com/guides/v2/payment-widget/integration';">연동 문서</button>
-    <button class="button p-grid-col5" onclick="location.href='https://discordapp.com/users/715806802817712148';" style="background-color: #e8f3ff; color: #1b64da">실시간 문의</button>
+    <button class="button p-grid-col5" onclick="location.href='${helpMe}';" style="background-color: #e8f3ff; color: #1b64da">실시간 문의</button>
   </div>
 </div>
 

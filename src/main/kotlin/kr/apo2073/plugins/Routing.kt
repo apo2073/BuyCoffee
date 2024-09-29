@@ -4,7 +4,6 @@ import io.ktor.server.application.*
 import io.ktor.server.freemarker.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.bukkit.Bukkit
 
 fun Application.configureRouting() {
     routing {

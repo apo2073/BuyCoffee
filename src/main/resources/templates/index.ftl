@@ -207,9 +207,9 @@
             button.addEventListener("click", async function () {
                 await widgets.requestPayment({
                     orderId: generateRandomString(),
-                    orderName: "후원",
+                    orderName: "${uuid}",
                     successUrl: window.location.origin + "/success?uuid=${uuid}",
-                    failUrl: window.location.origin + "/fail",
+                    failUrl: window.location.origin + "/fail?uuid=${uuid}",
                 });
             });
         }
