@@ -9,6 +9,9 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kr.apo2073.Applications
+import kr.apo2073.lib.Plugins.bcast
+import kr.apo2073.util.Dconfig
+import kr.apo2073.util.saveDconfig
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.json.simple.JSONObject
@@ -54,6 +57,8 @@ fun Application.configureTemplating() {
                 orderId = requestData.get("orderId").toString()
                 amount = requestData.get("amount").toString()
                 userUUID= requestData .get("uuid").toString()
+                Dconfig.set("${orderId}.done", false)
+                saveDconfig()
             } catch (e: ParseException) {
                 throw RuntimeException(e)
             }
@@ -111,12 +116,26 @@ fun Application.configureTemplating() {
         get("/success") {
             try {
                 val uuid = call.request.queryParameters["uuid"]
-                call.respond(FreeMarkerContent("success.ftl",
-                    mapOf("uuid" to uuid, "helpMe" to helpMe), ""))
+                val orderID=call.request.queryParameters["orderId"]
+
+                if (Dconfig.get(orderID.toString())==null) {
+                    call.respond(FreeMarkerContent("fail.ftl",
+                        mapOf("code" to "NO_ORDERID", "message" to "존재하지 않은 결제 ID입니다.", "helpME" to helpMe, "uuid" to uuid),
+                        ""))
+                } else if (Dconfig.getBoolean("${orderID}.done")) {
+                    call.respond(FreeMarkerContent("fail.ftl", mapOf("code" to "ALREADY_DONE", "message" to "이미 진행된 결제 ID입니다.", "helpME" to helpMe, "uuid" to uuid), ""))
+                } else {
+                    Dconfig.set("${orderID}.done", true)
+                    Dconfig.set("${orderID}.uuid", uuid)
+                    saveDconfig()
+                    call.respond(FreeMarkerContent("success.ftl",
+                        mapOf("uuid" to uuid, "helpMe" to helpMe), ""))
+                }
             } catch (e: Exception) {
                 call.respondText(e.toString())
             }
         }
+
 
         get("/fail") {
             try {
